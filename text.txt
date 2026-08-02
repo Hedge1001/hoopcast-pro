@@ -1,0 +1,6 @@
+git init
+git add .
+git commit -m "Initial commit: HoopCast AI live feed, stats, highlights"
+git branch -M main
+git remote add origin https://github.com/Hedge1001/hoopcast-pro.git
+git push -u origin main --force

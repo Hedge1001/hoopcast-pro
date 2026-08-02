@@ -1,0 +1,74 @@
+.highlight-reel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.25rem;
+  grid-column: 1 / -1;
+}
+
+.highlight-reel h2 {
+  font-family: var(--font-display);
+  margin: 0 0 0.75rem;
+}
+
+.highlight-reel__empty {
+  color: var(--chalk-dim);
+  font-size: 0.9rem;
+}
+
+.highlight-reel__strip {
+  display: flex;
+  gap: 0.9rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+}
+
+.highlight-card {
+  flex: 0 0 200px;
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.highlight-card__video {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  background: #000;
+  display: block;
+}
+
+.highlight-card__placeholder {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chalk-dim);
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 0.5rem;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--panel-raised),
+    var(--panel-raised) 10px,
+    var(--panel) 10px,
+    var(--panel) 20px
+  );
+}
+
+.highlight-card__meta {
+  padding: 0.5rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+  gap: 0.1rem;
+}
+
+.highlight-card__source {
+  color: var(--hardwood);
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+}

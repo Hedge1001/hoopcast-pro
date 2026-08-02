@@ -1,0 +1,48 @@
+.app {
+  min-height: 100%;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard__side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.roster-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+
+.roster-panel h2 {
+  font-family: var(--font-display);
+  margin: 0 0 0.75rem;
+}
+
+.roster-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.not-found {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--chalk-dim);
+}
+
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}

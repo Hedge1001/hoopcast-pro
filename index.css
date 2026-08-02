@@ -1,0 +1,61 @@
+:root {
+  /* Color tokens — broadcast scorebug / hardwood-under-lights */
+  --ink: #0e1116;
+  --panel: #171b22;
+  --panel-raised: #1f2530;
+  --line: #2a3542;
+  --chalk: #f5f3ee;
+  --chalk-dim: #a7b0bd;
+  --hardwood: #c8823b;
+  --led-amber: #f2b705;
+  --live-red: #e13c3c;
+  --court-green: #3ddc84;
+
+  /* Type tokens */
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--chalk);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--led-amber);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

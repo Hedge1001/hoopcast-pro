@@ -1,0 +1,26 @@
+.highlight-btn {
+  background: var(--panel-raised);
+  color: var(--chalk);
+  border: 1px solid var(--hardwood);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.highlight-btn--capturing,
+.highlight-btn--arming {
+  border-color: var(--live-red);
+  color: var(--live-red);
+}
+
+.highlight-btn--done {
+  border-color: var(--court-green);
+  color: var(--court-green);
+}
+
+.highlight-btn--error {
+  border-color: var(--chalk-dim);
+  color: var(--chalk-dim);
+}

@@ -1,0 +1,117 @@
+.live-feed {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+}
+
+.live-feed__header h2 {
+  font-family: var(--font-display);
+  margin: 0 0 0.15rem;
+  letter-spacing: 0.02em;
+}
+
+.live-feed__hint {
+  margin: 0;
+  color: var(--chalk-dim);
+  font-size: 0.85rem;
+}
+
+.live-feed__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.live-feed__controls select {
+  background: var(--panel-raised);
+  color: var(--chalk);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+  font-family: var(--font-body);
+  flex: 1;
+}
+
+.live-feed__row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.live-feed__stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.live-feed__stat-btn {
+  background: var(--panel-raised);
+  color: var(--chalk);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.55rem 0.4rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.live-feed__stat-btn:hover {
+  border-color: var(--hardwood);
+}
+
+.live-feed__stat-btn:active {
+  transform: scale(0.97);
+}
+
+.live-feed__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  max-height: 320px;
+  border-top: 1px solid var(--line);
+  padding-top: 0.5rem;
+}
+
+.feed-event {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.88rem;
+}
+
+.feed-event__time {
+  font-family: var(--font-mono);
+  color: var(--chalk-dim);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.feed-event__body {
+  flex: 1;
+}
+
+.feed-event__q {
+  color: var(--hardwood);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.live-feed__empty {
+  color: var(--chalk-dim);
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+}
+
+@media (max-width: 640px) {
+  .live-feed__stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

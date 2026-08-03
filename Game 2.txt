@@ -1,0 +1,25 @@
+import { games } from "../data/joeyHedgeData";
+
+export default function Games() {
+  return (
+    <>
+      <h1>Game Log</h1>
+
+      {games.map((game) => (
+        <div key={game.id}>
+          <h3>{game.opponent}</h3>
+
+          <p>{game.result}</p>
+
+          <p>
+            {game.points} PTS •
+            {game.rebounds} REB •
+            {game.assists} AST •
+            {game.steals} STL •
+            {game.blocks} BLK
+          </p>
+        </div>
+      ))}
+    </>
+  );
+}

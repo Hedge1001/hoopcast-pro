@@ -1,0 +1,24 @@
+import { player, season, scoutingReport } from "../data/joeyHedgeData";
+
+export default function Dashboard() {
+  return (
+    <main>
+      <h1>{player.firstName} {player.lastName}</h1>
+      <p>#{player.jersey} • {player.position}</p>
+
+      <div>
+        <h2>Season Totals</h2>
+        <p>Points: {season.totals.points}</p>
+        <p>Rebounds: {season.totals.rebounds}</p>
+        <p>Assists: {season.totals.assists}</p>
+        <p>Steals: {season.totals.steals}</p>
+        <p>Blocks: {season.totals.blocks}</p>
+      </div>
+
+      <div>
+        <h2>Scouting Report</h2>
+        <p>{scoutingReport.summary}</p>
+      </div>
+    </main>
+  );
+}

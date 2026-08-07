@@ -1,1 +1,6 @@
-import react from "@vitejs/plugin-react";sb-3104rd0i36qi.vercel.run
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+});

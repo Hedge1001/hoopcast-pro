@@ -2,6 +2,11 @@ unzip hoopcast-pro.zip
 cd hoopcast-pro
 npm install
 npm run dev          # try it locally first
+{
+  "rewrites": [
+    { "source": "/((?!icons/|manifest.json|service-worker.js).*)", "destination": "/index.html" }
+  ]
+}
 
 git init
 git add .

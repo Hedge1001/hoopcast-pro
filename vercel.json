@@ -1,0 +1,6 @@
+{
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/((?!icons/|manifest.json|service-worker.js).*)", "destination": "/index.html" }
+  ]
+}

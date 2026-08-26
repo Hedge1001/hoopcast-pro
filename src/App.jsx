@@ -1,54 +1,164 @@
+import { useMemo, useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import { useGameStore } from './hooks/useGameStore';
-import { useGameVideo } from './hooks/useGameVideo';
-import ScoreboardBar from './components/ScoreboardBar';
-import BroadcastBar from './components/BroadcastBar';
-import LiveFeed from './components/LiveFeed';
-import LiveStreamPanel from './components/LiveStreamPanel';
-import StatTable from './components/StatTable';
-import PlayerCard from './components/PlayerCard';
-import HighlightReel from './components/HighlightReel';
-import RecruitProfile from './components/RecruitProfile';
-import './App.css';
 
-const FEATURED_PLAYER_NAME = 'Joey Hedge';
+import ScoreboardBar from '../ScoreboardBar';
+import LiveFeed from '../LiveFeed';
+import StatTable from '../StatTable';
+import PlayerCard from '../PlayerCard';
+import HighlightReel from '../HighlightReel';
+import RecruitProfile from '../RecruitProfile';
 
-function Dashboard({ store }) {
-  const {
-    roster,
-    currentGame,
-    events,
-    statLines,
-    highlights,
-    logStat,
-    addHighlight,
-    setStreamUrl,
-  } = store;
+import { seedRoster, emptyGame } from '../mockGame';
+import { calculatePlayerStats } from '../statMath';
 
-  const video = useGameVideo(currentGame.id);
+import '../App.css';
 
-  // Only show Joey Hedge.
-  const playerRoster = roster.filter(
-    (player) => player.name === FEATURED_PLAYER_NAME
+const JOEY_NAME = 'Joey Hedge';
+
+function AppDashboard() {
+  const [roster] = useState(() => {
+    const saved = localStorage.getItem('hoopcast-roster');
+
+    const players = saved ? JSON.parse(saved) : seedRoster;
+
+    return players.filter(
+      (player) => player.name === JOEY_NAME
+    );
+  });
+
+  const [game, setGame] = useState(() => {
+    const saved = localStorage.getItem('hoopcast-game');
+
+    return saved ? JSON.parse(saved) : emptyGame();
+  });
+
+  const [events, setEvents] = useState(() => {
+    const saved = localStorage.getItem('hoopcast-events');
+
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [highlights, setHighlights] = useState(() => {
+    const saved = localStorage.getItem('hoopcast-highlights');
+
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const saveEvents = (nextEvents) => {
+    setEvents(nextEvents);
+    localStorage.setItem(
+      'hoopcast-events',
+      JSON.stringify(nextEvents)
+    );
+  };
+
+  const saveGame = (nextGame) => {
+    setGame(nextGame);
+    localStorage.setItem(
+      'hoopcast-game',
+      JSON.stringify(nextGame)
+    );
+  };
+
+  const addHighlight = (highlight) => {
+    const nextHighlights = [
+      ...highlights,
+      highlight,
+    ];
+
+    setHighlights(nextHighlights);
+
+    localStorage.setItem(
+      'hoopcast-highlights',
+      JSON.stringify(nextHighlights)
+    );
+  };
+
+  const logStat = (playerId, statKey) => {
+    const player = roster.find(
+      (p) => p.id === playerId
+    );
+
+    if (!player) return;
+
+    const event = {
+      id: `event-${Date.now()}`,
+      gameId: game.id,
+      playerId,
+      statKey,
+      timestamp: new Date().toISOString(),
+    };
+
+    const nextEvents = [
+      ...events,
+      event,
+    ];
+
+    saveEvents(nextEvents);
+
+    /*
+     * Keep team scoring totals intact.
+     * 2PT = +2
+     * 3PT = +3
+     * FT = +1
+     */
+    let scoreIncrease = 0;
+
+    if (statKey === 'pts2') {
+      scoreIncrease = 2;
+    }
+
+    if (statKey === 'pts3') {
+      scoreIncrease = 3;
+    }
+
+    if (statKey === 'ftm') {
+      scoreIncrease = 1;
+    }
+
+    if (scoreIncrease > 0) {
+      saveGame({
+        ...game,
+        homeScore:
+          Number(game.homeScore || 0) +
+          scoreIncrease,
+      });
+    }
+  };
+
+  const playerEvents = useMemo(() => {
+    const playerIds = new Set(
+      roster.map((player) => player.id)
+    );
+
+    return events.filter(
+      (event) =>
+        !event.playerId ||
+        playerIds.has(event.playerId)
+    );
+  }, [events, roster]);
+
+  const statLines = useMemo(() => {
+    const result = {};
+
+    roster.forEach((player) => {
+      result[player.id] =
+        calculatePlayerStats(
+          player.id,
+          events
+        );
+    });
+
+    return result;
+  }, [roster, events]);
+
+  const teamScore = Number(
+    game.homeScore || 0
   );
 
-  // Only Joey's stat line.
-  const playerIds = new Set(playerRoster.map((player) => player.id));
-
-  const playerStatLines = Object.fromEntries(
-    Object.entries(statLines).filter(([playerId]) =>
-      playerIds.has(playerId)
-    )
+  const opponentScore = Number(
+    game.awayScore || 0
   );
-
-  // Only Joey-related player events.
-  const playerEvents = events.filter(
-    (event) => !event.playerId || playerIds.has(event.playerId)
-  );
-
-  // Preserve team vs opponent scoring.
-  const teamScore = Number(currentGame.homeScore ?? 0);
-  const opponentScore = Number(currentGame.awayScore ?? 0);
 
   const result =
     teamScore > opponentScore
@@ -57,33 +167,13 @@ function Dashboard({ store }) {
         ? 'LOSS'
         : 'TIE';
 
-  const handleCaptureHighlight = async (meta) => {
-    const highlight = await video.captureHighlight(meta);
-    addHighlight(highlight);
-    return highlight;
-  };
-
   return (
     <>
-      {/* Existing live scoreboard */}
-      <ScoreboardBar game={currentGame} />
-
-      <BroadcastBar
-        status={video.status}
-        pendingCount={video.pendingCount}
-        onStart={video.start}
-        onStop={video.stop}
-        getFullGameClipUrl={video.getFullGameClipUrl}
-      />
+      <ScoreboardBar game={game} />
 
       <main className="dashboard">
 
-        <LiveStreamPanel
-          embedUrl={currentGame.streamEmbedUrl}
-          onSetEmbedUrl={setStreamUrl}
-        />
-
-        {/* TEAM GAME RESULT */}
+        {/* TEAM VS OPPONENT RESULT */}
         <section
           className="game-results"
           aria-label="Team game result"
@@ -106,31 +196,32 @@ function Dashboard({ store }) {
 
         {/* JOEY HEDGE ONLY */}
         <LiveFeed
-          roster={playerRoster}
+          roster={roster}
           events={playerEvents}
+          gameId={game.id}
           onLogStat={logStat}
-          onCaptureHighlight={handleCaptureHighlight}
+          onCaptureHighlight={addHighlight}
         />
 
         <div className="dashboard__side">
 
-          {/* Joey's stats only */}
+          {/* JOEY'S STATS ONLY */}
           <StatTable
-            roster={playerRoster}
-            statLines={playerStatLines}
+            roster={roster}
+            statLines={statLines}
           />
 
-          {/* Joey's player card only */}
+          {/* JOEY'S PLAYER CARD ONLY */}
           <section className="roster-panel">
-            <h2>Joey Hedge</h2>
+            <h2>Player</h2>
 
             <div className="roster-panel__list">
-              {playerRoster.map((player) => (
+              {roster.map((player) => (
                 <PlayerCard
                   key={player.id}
                   player={player}
                   averages={
-                    playerStatLines[player.id]?.averages
+                    statLines[player.id]?.averages
                   }
                 />
               ))}
@@ -139,10 +230,9 @@ function Dashboard({ store }) {
 
         </div>
 
-        {/* Keep highlights */}
+        {/* JOEY'S HIGHLIGHTS */}
         <HighlightReel
           highlights={highlights}
-          pendingCount={video.pendingCount}
         />
 
       </main>
@@ -150,53 +240,80 @@ function Dashboard({ store }) {
   );
 }
 
+function JoeyProfile() {
+  const [roster] = useState(() => {
+    const saved = localStorage.getItem(
+      'hoopcast-roster'
+    );
+
+    const players = saved
+      ? JSON.parse(saved)
+      : seedRoster;
+
+    return players.filter(
+      (player) => player.name === JOEY_NAME
+    );
+  });
+
+  const [events] = useState(() => {
+    const saved = localStorage.getItem(
+      'hoopcast-events'
+    );
+
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [highlights] = useState(() => {
+    const saved = localStorage.getItem(
+      'hoopcast-highlights'
+    );
+
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const statLines = {};
+
+  roster.forEach((player) => {
+    statLines[player.id] =
+      calculatePlayerStats(
+        player.id,
+        events
+      );
+  });
+
+  return (
+    <RecruitProfile
+      roster={roster}
+      statLines={statLines}
+      highlights={highlights}
+    />
+  );
+}
+
 export default function App() {
-  const store = useGameStore();
-
-  // Only Joey is available on the recruiting/profile route.
-  const playerRoster = store.roster.filter(
-    (player) => player.name === FEATURED_PLAYER_NAME
-  );
-
-  const playerIds = new Set(
-    playerRoster.map((player) => player.id)
-  );
-
-  const playerStatLines = Object.fromEntries(
-    Object.entries(store.statLines).filter(([playerId]) =>
-      playerIds.has(playerId)
-    )
-  );
-
   return (
     <div className="app">
       <Routes>
 
-        {/* Main dashboard */}
         <Route
           path="/"
-          element={<Dashboard store={store} />}
+          element={<AppDashboard />}
         />
 
-        {/* Joey Hedge profile only */}
         <Route
           path="/player/:playerId"
-          element={
-            <RecruitProfile
-              roster={playerRoster}
-              statLines={playerStatLines}
-              highlights={store.highlights}
-            />
-          }
+          element={<JoeyProfile />}
         />
 
-        {/* 404 */}
         <Route
           path="*"
           element={
             <div className="not-found">
               <p>Page not found.</p>
-              <Link to="/">Back home</Link>
+
+              <Link to="/">
+                Back home
+              </Link>
             </div>
           }
         />

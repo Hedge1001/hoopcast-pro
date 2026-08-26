@@ -1,9 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App.jsx';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+import App from './App.jsx';
+import './styles.css';
+
+ReactDOM.createRoot(
+  document.getElementById('root')
+).render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
@@ -11,10 +15,18 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>
 );
 
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
+if (
+  'serviceWorker' in navigator &&
+  import.meta.env.PROD
+) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').catch((err) => {
-      console.warn('HoopCast: service worker registration failed.', err);
-    });
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .catch((err) => {
+        console.warn(
+          'HoopCast: service worker registration failed.',
+          err
+        );
+      });
   });
 }

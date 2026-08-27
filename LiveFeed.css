@@ -1,4 +1,28 @@
-.live-feed {
+.live-feed {import { useMemo, useState } from 'react';
+
+import FeedEvent from './FeedEvent';
+
+import HighlightCaptureButton from './HighlightCaptureButton';
+
+import { STAT_TYPES } from './mockGame';
+
+import './LiveFeed.css';
+
+// Play-by-play stream plus the quick-entry stat logger.
+
+export default function LiveFeed({
+
+  roster,
+
+  events,
+
+  gameId,
+
+  onLogStat,
+
+  onCaptureHighlight
+
+}) {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;

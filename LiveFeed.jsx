@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import FeedEvent from './FeedEvent';
 import HighlightCaptureButton from './HighlightCaptureButton';
-import { STAT_TYPES } from '../data/mockGame';
+import { STAT_TYPES } from 'import { STAT_TYPES } from 'live feed'
 import './LiveFeed.css';
 
 // Play-by-play stream plus the quick-entry stat logger. In production this

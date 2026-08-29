@@ -2,7 +2,7 @@
 // running (career/season-to-date) averages. Kept dependency-free so it can
 // be unit tested or reused server-side later.
 
-import { STAT_TYPES } from '.data/mockGame';
+import { STAT_TYPES } from './mockGame';
 
 function blankTotals() {
   const totals = { points: 0, gamesPlayed: 0 };

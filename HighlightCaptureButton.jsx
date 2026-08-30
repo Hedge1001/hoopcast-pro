@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { getClipsForMoment } from '../services/xbotgoService';
+import { getClipsForMoment } from './services/xbotgoService';
 import './HighlightCaptureButton.css';
 
 // Two highlight-capture paths, matched to what's actually available today:

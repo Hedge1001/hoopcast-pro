@@ -9,6 +9,7 @@ import StatTable from './components/StatTable';
 import PlayerCard from './components/PlayerCard';
 import HighlightReel from './components/HighlightReel';
 import RecruitProfile from './components/RecruitProfile';
+import { computeStatLines } from '../statMath';
 import './App.css';
 
 const FEATURED_PLAYER_NAME = 'Joey Hedge';

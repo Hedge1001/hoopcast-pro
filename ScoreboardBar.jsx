@@ -31,7 +31,5 @@ export default function ScoreboardBar({ game, teamName = 'HOME' }) {
 function pad(n) {
   return String(n).padStart(2, '0');
 }
-import { seedRoster, emptyGame, STAT_TYPES } from '../data/mockGame';
-const POINTS_BY_KEY = Object.fromEntries(STAT_TYPES.map((s) => [s.key, s.points]));
 
 

@@ -1,4 +1,4 @@
-import { STAT_TYPES } from '../data/mockGame';
+import { STAT_TYPES } from './mockGame';
 
 const LABELS = Object.fromEntries(STAT_TYPES.map((s) => [s.key, s.label]));
 

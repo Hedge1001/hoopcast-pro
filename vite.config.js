@@ -1,13 +1,28 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+
   server: {
-    port: 5173,
-    allowedHosts: true,
+    port: 3000,
+    open: true,
   },
-  preview: {
-    allowedHosts: true,
+
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+    minify: 'esbuild',
   },
-})
+
+  define: {
+    __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
+  },
+});
